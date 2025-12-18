@@ -1,21 +1,42 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-public class LifecyckeEvent {
+@Entity
+@Table(name = "lifecycle_events")
+public class LifecycleEvent {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
     private Asset asset;
+
     private String eventType;
     private String eventDescription;
     private LocalDateTime eventDate;
+
+    @ManyToOne
     private User performedBy;
 
-    public LifecyckeEvent(Asset asset, LocalDateTime eventDate, String eventDescription, String eventType, User performedBy) {
+    public LifecycleEvent() {}
+
+    public LifecycleEvent(Long id, Asset asset, String eventType,
+                          String eventDescription, LocalDateTime eventDate,
+                          User performedBy) {
+        this.id = id;
         this.asset = asset;
-        this.eventDate = eventDate;
-        this.eventDescription = eventDescription;
         this.eventType = eventType;
+        this.eventDescription = eventDescription;
+        this.eventDate = eventDate;
         this.performedBy = performedBy;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (eventDate == null) eventDate = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -65,7 +86,6 @@ public class LifecyckeEvent {
     public void setPerformedBy(User performedBy) {
         this.performedBy = performedBy;
     }
-
 
     
 }

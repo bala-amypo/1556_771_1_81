@@ -1,58 +1,48 @@
 package com.example.demo.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import java.time.*;
 
+@Entity
+@Table(name = "assets")
 public class Asset {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String assetTag;
-    private String assertType;
+
+    private String assetType;
     private String model;
     private LocalDate purchaseDate;
     private String status;
+
+    @ManyToOne
     private User currentHolder;
+
     private LocalDateTime createdAt;
 
-    public Asset(String assertType, String assetTag, LocalDateTime createdAt, User currentHolder, String model, LocalDate purchaseDate, String status) {
-        this.assertType = assertType;
-        this.assetTag = assetTag;
-        this.createdAt = createdAt;
-        this.currentHolder = currentHolder;
-        this.model = model;
-        this.purchaseDate = purchaseDate;
-        this.status = status;
-    }
+    public Asset() {}
 
-    public void setId(Long id) {
+    public Asset(Long id, String assetTag, String assetType, String model,
+                 LocalDate purchaseDate, String status, User currentHolder,
+                 LocalDateTime createdAt) {
         this.id = id;
-    }
-
-    public void setAssetTag(String assetTag) {
         this.assetTag = assetTag;
-    }
-
-    public void setAssertType(String assertType) {
-        this.assertType = assertType;
-    }
-
-    public void setModel(String model) {
+        this.assetType = assetType;
         this.model = model;
-    }
-
-    public void setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate = purchaseDate;
-    }
-
-    public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setCurrentHolder(User currentHolder) {
         this.currentHolder = currentHolder;
+        this.createdAt = createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    @PrePersist
+    public void prePersist() {
+        if (status == null) status = "AVAILABLE";
+        if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -63,8 +53,8 @@ public class Asset {
         return assetTag;
     }
 
-    public String getAssertType() {
-        return assertType;
+    public String getAssetType() {
+        return assetType;
     }
 
     public String getModel() {
@@ -87,4 +77,37 @@ public class Asset {
         return createdAt;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setAssetTag(String assetTag) {
+        this.assetTag = assetTag;
+    }
+
+    public void setAssetType(String assetType) {
+        this.assetType = assetType;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setCurrentHolder(User currentHolder) {
+        this.currentHolder = currentHolder;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+   
 }
