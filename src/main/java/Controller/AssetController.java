@@ -1,4 +1,4 @@
-@Service
+/**@Service
 public class AssetServiceImpl implements AssetService {
     @Autowired
     private AssetRepository assetRepository;
@@ -27,4 +27,4 @@ public class AssetServiceImpl implements AssetService {
         asset.setStatus(status); //
         assetRepository.save(asset);
     }
-}
+}*/
