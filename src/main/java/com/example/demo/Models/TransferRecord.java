@@ -1,21 +1,37 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
-public class TranseferRecord {
+@Entity
+@Table(name = "transfer_records")
+public class TransferRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
     private Asset asset;
+
     private String fromDepartment;
     private String toDepartment;
     private LocalDate transferDate;
+
+    @ManyToOne
     private User approvedBy;
 
-    public TranseferRecord(User approvedBy, Asset asset, String fromDepartment, String toDepartment, LocalDate transferDate) {
-        this.approvedBy = approvedBy;
+    public TransferRecord() {}
+
+    public TransferRecord(Long id, Asset asset, String fromDepartment,
+                          String toDepartment, LocalDate transferDate,
+                          User approvedBy) {
+        this.id = id;
         this.asset = asset;
         this.fromDepartment = fromDepartment;
         this.toDepartment = toDepartment;
         this.transferDate = transferDate;
+        this.approvedBy = approvedBy;
     }
 
     public Long getId() {
@@ -65,8 +81,6 @@ public class TranseferRecord {
     public void setApprovedBy(User approvedBy) {
         this.approvedBy = approvedBy;
     }
-   
+
     
-
-
 }

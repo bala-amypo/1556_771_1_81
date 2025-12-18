@@ -1,31 +1,51 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "users")
 public class User {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fullname;
+
+    private String fullName;
+
+    @Column(unique = true)
     private String email;
+
     private String department;
     private String role;
     private String password;
     private LocalDateTime createdAt;
 
-    public User(LocalDateTime createdAt, String department, String email, String fullname, String password, String role) {
-        this.createdAt = createdAt;
-        this.department = department;
+    public User() {}
+
+    public User(Long id, String fullName, String email,
+                String department, String role,
+                String password, LocalDateTime createdAt) {
+        this.id = id;
+        this.fullName = fullName;
         this.email = email;
-        this.fullname = fullname;
-        this.password = password;
+        this.department = department;
         this.role = role;
+        this.password = password;
+        this.createdAt = createdAt;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (role == null) role = "USER";
+        if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getEmail() {
@@ -52,8 +72,8 @@ public class User {
         this.id = id;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public void setEmail(String email) {
@@ -75,9 +95,5 @@ public class User {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
-
     
- }
- 
-  
+}
