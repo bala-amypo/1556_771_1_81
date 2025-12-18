@@ -1,4 +1,4 @@
-@Service
+/**@Service
 public class TransferRecordServiceImpl implements TransferRecordService {
     @Autowired
     private TransferRecordRepository transferRepository;
@@ -22,4 +22,4 @@ public class TransferRecordServiceImpl implements TransferRecordService {
         return transferRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transfer record not found")); //
     }
-}
+}*/

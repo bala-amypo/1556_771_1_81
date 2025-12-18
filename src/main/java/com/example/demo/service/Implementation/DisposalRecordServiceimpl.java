@@ -1,4 +1,4 @@
-@Service
+/**@Service
 public class DisposalRecordServiceImpl implements DisposalRecordService {
 
     @Autowired
@@ -35,4 +35,4 @@ public class DisposalRecordServiceImpl implements DisposalRecordService {
     public List<DisposalRecord> getAllDisposals() {
         return disposalRepository.findAll();
     }
-}
+}*/

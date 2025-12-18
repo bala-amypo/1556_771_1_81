@@ -1,4 +1,4 @@
-@Service
+/**@Service
 public class LifecycleEventServiceImpl implements LifecycleEventService {
     @Autowired
     private LifecycleEventRepository eventRepository;
@@ -21,4 +21,4 @@ public class LifecycleEventServiceImpl implements LifecycleEventService {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found")); //
     }
-}
+}*/

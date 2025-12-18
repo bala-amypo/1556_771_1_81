@@ -1,4 +1,4 @@
-@Service
+/**@Service
 public class AssignmentServiceImpl implements AssignmentService {
 
     @Autowired
@@ -52,4 +52,4 @@ public class AssignmentServiceImpl implements AssignmentService {
         
         assignmentRepository.save(assignment);
     }
-}
+}*/
