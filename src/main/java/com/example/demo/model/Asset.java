@@ -52,5 +52,5 @@ public class Asset {
         }
     }
 
-    // getters and setters
+    
 }
