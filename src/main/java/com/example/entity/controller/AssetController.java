@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/assets")
+@RequestMapping("/assets")
 public class AssetController {
 
     private final AssetService assetService;
@@ -31,9 +31,10 @@ public class AssetController {
         return assetService.getAsset(id);
     }
 
-    @PutMapping("/status/{id}")
-    public Asset updateStatus(@PathVariable Long id,
-                              @RequestParam String status) {
+    @PutMapping("/{id}/status")
+    public Asset updateStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
         return assetService.updateStatus(id, status);
     }
 }

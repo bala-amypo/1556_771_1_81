@@ -5,6 +5,8 @@ import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AssetServiceImpl implements AssetService {
 
@@ -15,17 +17,25 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Asset saveAsset(Asset asset) {
+    public Asset createAsset(Asset asset) {
         asset.setStatus("ACTIVE");
         return assetRepository.save(asset);
     }
 
-    // ✅ THIS METHOD FIXES YOUR ERROR
+    @Override
+    public List<Asset> getAllAssets() {
+        return assetRepository.findAll();
+    }
+
+    @Override
+    public Asset getAsset(Long id) {
+        return assetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Asset not found"));
+    }
+
     @Override
     public Asset updateStatus(Long assetId, String status) {
-        Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new RuntimeException("Asset not found"));
-
+        Asset asset = getAsset(assetId);
         asset.setStatus(status);
         return assetRepository.save(asset);
     }

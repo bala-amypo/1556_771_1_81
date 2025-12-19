@@ -1,10 +1,15 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Asset;
+import java.util.List;
 
 public interface AssetService {
 
-    Asset saveAsset(Asset asset);
+    Asset createAsset(Asset asset);
 
-    Asset updateStatus(Long assetId, String status); // 👈 REQUIRED
+    List<Asset> getAllAssets();
+
+    Asset getAsset(Long id);
+
+    Asset updateStatus(Long assetId, String status);
 }
