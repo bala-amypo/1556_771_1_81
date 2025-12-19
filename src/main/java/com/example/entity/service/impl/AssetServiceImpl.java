@@ -16,7 +16,17 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Asset saveAsset(Asset asset) {
-        asset.setStatus("ACTIVE");   // ✅ NOW WORKS
+        asset.setStatus("ACTIVE");
+        return assetRepository.save(asset);
+    }
+
+    // ✅ THIS METHOD FIXES YOUR ERROR
+    @Override
+    public Asset updateStatus(Long assetId, String status) {
+        Asset asset = assetRepository.findById(assetId)
+                .orElseThrow(() -> new RuntimeException("Asset not found"));
+
+        asset.setStatus(status);
         return assetRepository.save(asset);
     }
 }
