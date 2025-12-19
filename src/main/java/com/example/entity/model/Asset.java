@@ -12,16 +12,13 @@ public class Asset {
 
     private String assetName;
 
+    private String status;   // ✅ REQUIRED FIELD
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;   // ✅ ERROR FIXED
+    private User user;       // ✅ FIXED User reference
 
     public Asset() {}
-
-    public Asset(String assetName, User user) {
-        this.assetName = assetName;
-        this.user = user;
-    }
 
     public Long getId() {
         return id;
@@ -37,6 +34,15 @@ public class Asset {
 
     public void setAssetName(String assetName) {
         this.assetName = assetName;
+    }
+
+    // ✅ REQUIRED FOR AssetServiceImpl
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public User getUser() {

@@ -1,123 +1,41 @@
-// package com.example.demo.entity;
+package com.example.demo.entity;
 
-// import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
-// import jakarta.persistence.Column;
-// import jakarta.persistence.Entity;
-// import jakarta.persistence.GeneratedValue;
-// import jakarta.persistence.GenerationType;
-// import jakarta.persistence.Id;
-// import jakarta.persistence.PrePersist;
-// import jakarta.persistence.Table;
+@Entity
+@Table(name = "users")
+public class User {
 
-// @Entity
-// @Table(name = "users")
-// public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
+    private String username;
+    private String password;
 
-//     private String fullName;
+    public User() {}
 
-//     @Column(unique = true, nullable = false)
-//     private String email;
+    public Long getId() {
+        return id;
+    }
 
-//     private String department;
-//     private String role;
-//     private String password;
-//     private LocalDateTime createdAt;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-//     public User() {
-//     }
+    public String getUsername() {
+        return username;
+    }
 
-//     public User(Long id, String fullName, String email,
-//                 String department, String role,
-//                 String password, LocalDateTime createdAt) {
-//         this.id = id;
-//         this.fullName = fullName;
-//         this.email = email;
-//         this.department = department;
-//         this.role = role;
-//         this.password = password;
-//         this.createdAt = createdAt;
-//     }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-//     public User(LocalDateTime createdAt, String department, String email, String fullName, String password, String role) {
-//         this.createdAt = createdAt;
-//         this.department = department;
-//         this.email = email;
-//         this.fullName = fullName;
-//         this.password = password;
-//         this.role = role;
-//     }
+    public String getPassword() {
+        return password;
+    }
 
-//     @PrePersist
-//     public void prePersist() {
-//         if (role == null) {
-//             role = "USER";
-//         }
-//         if (createdAt == null) {
-//             createdAt = LocalDateTime.now();
-//         }
-//     }
-
-//     public Long getId() {
-//         return id;
-//     }
-
-//     public String getFullName() {
-//         return fullName;
-//     }
-
-//     public String getEmail() {
-//         return email;
-//     }
-
-//     public String getDepartment() {
-//         return department;
-//     }
-
-//     public String getRole() {
-//         return role;
-//     }
-
-//     public String getPassword() {
-//         return password;
-//     }
-
-//     public LocalDateTime getCreatedAt() {
-//         return createdAt;
-//     }
-
-//     public void setId(Long id) {
-//         this.id = id;
-//     }
-
-//     public void setFullName(String fullName) {
-//         this.fullName = fullName;
-//     }
-
-//     public void setEmail(String email) {
-//         this.email = email;
-//     }
-
-//     public void setDepartment(String department) {
-//         this.department = department;
-//     }
-
-//     public void setRole(String role) {
-//         this.role = role;
-//     }
-
-//     public void setPassword(String password) {
-//         this.password = password;
-//     }
-
-//     public void setCreatedAt(LocalDateTime createdAt) {
-//         this.createdAt = createdAt;
-//     }
-    
-    
-// }
-
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
