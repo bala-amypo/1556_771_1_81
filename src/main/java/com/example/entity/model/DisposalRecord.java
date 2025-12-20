@@ -26,22 +26,13 @@ public class DisposalRecord {
 
     public DisposalRecord() {}
 
-    public DisposalRecord(Long id, Asset asset, String disposalMethod,
-                          LocalDate disposalDate, User approvedBy,
-                          String notes, LocalDateTime createdAt) {
-        this.id = id;
-        this.asset = asset;
-        this.disposalMethod = disposalMethod;
-        this.disposalDate = disposalDate;
-        this.approvedBy = approvedBy;
-        this.notes = notes;
-        this.createdAt = createdAt;
-    }
-
     @PrePersist
     void prePersist() {
         if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
-    // getters & setters
+    public LocalDate getDisposalDate() { return disposalDate; }
+    public User getApprovedBy() { return approvedBy; }
+    public void setAsset(Asset asset) { this.asset = asset; }
+    public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
 }
