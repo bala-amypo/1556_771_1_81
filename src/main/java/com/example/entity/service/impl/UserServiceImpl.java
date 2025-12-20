@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService {
         this.encoder = encoder;
     }
 
+    @Override
     public User registerUser(User user) {
         if (repo.existsByEmail(user.getEmail()))
             throw new ValidationException("Email already in use");
@@ -35,11 +36,13 @@ public class UserServiceImpl implements UserService {
         return repo.save(user);
     }
 
+    @Override
     public User getUser(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
+    @Override
     public List<User> getAllUsers() {
         return repo.findAll();
     }
