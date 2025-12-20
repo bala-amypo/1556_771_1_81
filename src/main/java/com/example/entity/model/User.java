@@ -1,41 +1,45 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private String fullName;
+    private String email;
+    private String department;
+    private String role;
     private String password;
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "currentHolder")
+    private List<Asset> assets;
 
     public User() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public User(Long id, String fullName, String email, String department,
+                String role, String password, LocalDateTime createdAt) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+        this.fullName = fullName;
+        this.email = email;
+        this.department = department;
+        this.role = role;
         this.password = password;
+        this.createdAt = createdAt;
     }
+
+    @PrePersist
+    void prePersist() {
+        if (role == null) role = "USER";
+        if (createdAt == null) createdAt = LocalDateTime.now();
+    }
+
+    // getters & setters
 }
