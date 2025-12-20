@@ -24,7 +24,6 @@ public class UserController {
         user.setEmail(req.email);
         user.setDepartment(req.department);
         user.setPassword(req.password);
-
         return userService.registerUser(user);
     }
 
@@ -35,6 +34,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+        // 🔴 FIX IS HERE 👇
+        return userService.getUser(id);
     }
 }
