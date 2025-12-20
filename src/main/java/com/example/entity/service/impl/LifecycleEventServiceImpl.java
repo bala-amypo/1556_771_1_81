@@ -1,65 +1,63 @@
-// package com.example.demo.service.impl;
+package com.example.demo.service.impl;
 
-// import com.example.demo.entity.Asset;
-// import com.example.demo.entity.LifecycleEvent;
-// import com.example.demo.entity.User;
-// import com.example.demo.exception.ResourceNotFoundException;
-// import com.example.demo.exception.ValidationException;
-// import com.example.demo.repository.AssetRepository;
-// import com.example.demo.repository.LifecycleEventRepository;
-// import com.example.demo.repository.UserRepository;
-// import com.example.demo.service.LifecycleEventService;
-// import org.springframework.stereotype.Service;
+import com.example.demo.entity.Asset;
+import com.example.demo.entity.LifecycleEvent;
+import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.ValidationException;
+import com.example.demo.repository.AssetRepository;
+import com.example.demo.repository.LifecycleEventRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.LifecycleEventService;
+import org.springframework.stereotype.Service;
 
-// import java.util.List;
+import java.util.List;
 
-// @Service
-// public class LifecycleEventServiceImpl implements LifecycleEventService {
+@Service
+public class LifecycleEventServiceImpl implements LifecycleEventService {
 
-//     private final LifecycleEventRepository lifecycleEventRepository;
-//     private final AssetRepository assetRepository;
-//     private final UserRepository userRepository;
+    private final LifecycleEventRepository eventRepo;
+    private final AssetRepository assetRepo;
+    private final UserRepository userRepo;
 
-//     // ORDER MATTERS
-//     public LifecycleEventServiceImpl(LifecycleEventRepository lifecycleEventRepository,
-//                                      AssetRepository assetRepository,
-//                                      UserRepository userRepository) {
-//         this.lifecycleEventRepository = lifecycleEventRepository;
-//         this.assetRepository = assetRepository;
-//         this.userRepository = userRepository;
-//     }
+    // ⚠️ constructor order MUST match helper doc
+    public LifecycleEventServiceImpl(LifecycleEventRepository eventRepo,
+                                     AssetRepository assetRepo,
+                                     UserRepository userRepo) {
+        this.eventRepo = eventRepo;
+        this.assetRepo = assetRepo;
+        this.userRepo = userRepo;
+    }
 
-//     @Override
-//     public LifecycleEvent logEvent(Long assetId, Long userId, LifecycleEvent event) {
+    @Override
+    public LifecycleEvent logEvent(Long assetId, Long userId, LifecycleEvent event) {
 
-//         Asset asset = assetRepository.findById(assetId)
-//                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+        Asset asset = assetRepo.findById(assetId)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
 
-//         User user = userRepository.findById(userId)
-//                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-//         if (event.getEventType() == null) {
-//             throw new ValidationException("Event type is required");
-//         }
+        if (event.getEventType() == null)
+            throw new ValidationException("Event type is required");
 
-//         if (event.getEventDescription() == null || event.getEventDescription().isEmpty()) {
-//             throw new ValidationException("Event description must not be empty");
-//         }
+        if (event.getEventDescription() == null || event.getEventDescription().isEmpty())
+            throw new ValidationException("Event description must not be empty");
 
-//         event.setAsset(asset);
-//         event.setPerformedBy(user);
+        event.setAsset(asset);
+        event.setPerformedBy(user);
 
-//         return lifecycleEventRepository.save(event);
-//     }
+        return eventRepo.save(event);
+    }
 
-//     @Override
-//     public List<LifecycleEvent> getEventsForAsset(Long assetId) {
-//         return lifecycleEventRepository.findByAssetId(assetId);
-//     }
+    @Override
+    public List<LifecycleEvent> getEventsForAsset(Long assetId) {
+        return eventRepo.findByAssetId(assetId);
+    }
 
-//     @Override
-//     public LifecycleEvent getEvent(Long id) {
-//         return lifecycleEventRepository.findById(id)
-//                 .orElseThrow(() -> new ResourceNotFoundException("Lifecycle event not found"));
-//     }
-// }
+    @Override
+    public LifecycleEvent getEvent(Long id) {
+        return eventRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Lifecycle event not found"));
+    }
+}
