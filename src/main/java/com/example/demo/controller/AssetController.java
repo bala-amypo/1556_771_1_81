@@ -17,23 +17,12 @@ public class AssetController {
     }
 
     @PostMapping
-    public Asset createAsset(@RequestBody Asset asset) {
+    public Asset create(@RequestBody Asset asset) {
         return assetService.createAsset(asset);
     }
 
     @GetMapping
-    public List<Asset> getAllAssets() {
+    public List<Asset> getAll() {
         return assetService.getAllAssets();
-    }
-
-    @GetMapping("/{id}")
-    public Asset getAssetById(@PathVariable Long id) {
-        return assetService.getAsset(id);
-    }
-
-    @PutMapping("/status/{id}")
-    public Asset updateAssetStatus(@PathVariable Long id,
-                                   @RequestParam String status) {
-        return assetService.updateStatus(id, status);
     }
 }
