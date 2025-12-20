@@ -1,7 +1,9 @@
+// File: src/main/java/com/example/demo/controller/DisposalRecordController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.DisposalRecord;
 import com.example.demo.service.DisposalRecordService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,26 +11,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/disposals")
 public class DisposalRecordController {
-
-    private final DisposalRecordService service;
-
-    public DisposalRecordController(DisposalRecordService service) {
-        this.service = service;
+    
+    private final DisposalRecordService disposalRecordService;
+    
+    public DisposalRecordController(DisposalRecordService disposalRecordService) {
+        this.disposalRecordService = disposalRecordService;
     }
-
+    
     @PostMapping("/{assetId}")
-    public DisposalRecord create(@PathVariable Long assetId,
-                                 @RequestBody DisposalRecord disposal) {
-        return service.createDisposal(assetId, disposal);
+    public ResponseEntity<DisposalRecord> createDisposal(
+            @PathVariable Long assetId,
+            @RequestBody DisposalRecord disposal) {
+        DisposalRecord createdDisposal = disposalRecordService.createDisposal(assetId, disposal);
+        return ResponseEntity.ok(createdDisposal);
     }
-
+    
     @GetMapping
-    public List<DisposalRecord> getAll() {
-        return service.getAllDisposals();
+    public ResponseEntity<List<DisposalRecord>> getAllDisposals() {
+        List<DisposalRecord> disposals = disposalRecordService.getAllDisposals();
+        return ResponseEntity.ok(disposals);
     }
-
+    
     @GetMapping("/{id}")
-    public DisposalRecord getById(@PathVariable Long id) {
-        return service.getDisposal(id);
+    public ResponseEntity<DisposalRecord> getDisposal(@PathVariable Long id) {
+        DisposalRecord disposal = disposalRecordService.getDisposal(id);
+        return ResponseEntity.ok(disposal);
     }
 }

@@ -1,7 +1,9 @@
+// File: src/main/java/com/example/demo/controller/TransferRecordController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.TransferRecord;
 import com.example.demo.service.TransferRecordService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,26 +11,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/transfers")
 public class TransferRecordController {
-
-    private final TransferRecordService service;
-
-    public TransferRecordController(TransferRecordService service) {
-        this.service = service;
+    
+    private final TransferRecordService transferRecordService;
+    
+    public TransferRecordController(TransferRecordService transferRecordService) {
+        this.transferRecordService = transferRecordService;
     }
-
+    
     @PostMapping("/{assetId}")
-    public TransferRecord create(@PathVariable Long assetId,
-                                 @RequestBody TransferRecord record) {
-        return service.createTransfer(assetId, record);
+    public ResponseEntity<TransferRecord> createTransfer(
+            @PathVariable Long assetId,
+            @RequestBody TransferRecord record) {
+        TransferRecord createdRecord = transferRecordService.createTransfer(assetId, record);
+        return ResponseEntity.ok(createdRecord);
     }
-
+    
     @GetMapping("/asset/{assetId}")
-    public List<TransferRecord> getByAsset(@PathVariable Long assetId) {
-        return service.getTransfersForAsset(assetId);
+    public ResponseEntity<List<TransferRecord>> getTransfersForAsset(@PathVariable Long assetId) {
+        List<TransferRecord> transfers = transferRecordService.getTransfersForAsset(assetId);
+        return ResponseEntity.ok(transfers);
     }
-
+    
     @GetMapping("/{id}")
-    public TransferRecord getById(@PathVariable Long id) {
-        return service.getTransfer(id);
+    public ResponseEntity<TransferRecord> getTransfer(@PathVariable Long id) {
+        TransferRecord transfer = transferRecordService.getTransfer(id);
+        return ResponseEntity.ok(transfer);
     }
 }
