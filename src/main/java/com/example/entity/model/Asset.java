@@ -1,55 +1,59 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "assets")
+@Table(name = "assets", uniqueConstraints = @UniqueConstraint(columnNames = "assetTag"))
 public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String assetName;
-
-    private String status;   // ✅ REQUIRED FIELD
+    private String assetTag;
+    private String assetType;
+    private String model;
+    private LocalDate purchaseDate;
+    private String status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;       // ✅ FIXED User reference
+    @JoinColumn(name = "current_holder_id")
+    private User currentHolder;
+
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "asset")
+    private List<LifecycleEvent> lifecycleEvents;
+
+    @OneToMany(mappedBy = "asset")
+    private List<TransferRecord> transferRecords;
+
+    @OneToMany(mappedBy = "asset")
+    private List<DisposalRecord> disposalRecords;
 
     public Asset() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public Asset(Long id, String assetTag, String assetType, String model,
+                 LocalDate purchaseDate, String status, User currentHolder,
+                 LocalDateTime createdAt) {
         this.id = id;
-    }
-
-    public String getAssetName() {
-        return assetName;
-    }
-
-    public void setAssetName(String assetName) {
-        this.assetName = assetName;
-    }
-
-    // ✅ REQUIRED FOR AssetServiceImpl
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+        this.assetTag = assetTag;
+        this.assetType = assetType;
+        this.model = model;
+        this.purchaseDate = purchaseDate;
         this.status = status;
+        this.currentHolder = currentHolder;
+        this.createdAt = createdAt;
     }
 
-    public User getUser() {
-        return user;
+    @PrePersist
+    void prePersist() {
+        if (status == null) status = "AVAILABLE";
+        if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    // getters & setters
 }
