@@ -1,45 +1,56 @@
-// File: src/main/java/com/example/demo/controller/UserController.java
 package com.example.demo.controller;
 
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")   // ✅ IMPORTANT: fixes Swagger / browser CORS issue
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    
+
     private final UserService userService;
-    
+
+    // ✅ Constructor injection (required)
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    
+
+    // ✅ PUBLIC REGISTER ENDPOINT
+    // POST /api/users/register
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest request) {
+    public User registerUser(@RequestBody RegisterRequest request) {
+
         User user = new User();
-        user.setFullName(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setDepartment(request.getDepartment());
-        user.setPassword(request.getPassword());
-        
-        User registeredUser = userService.registerUser(user);
-        return ResponseEntity.ok(registeredUser);
+        user.setFullName(request.fullName);
+        user.setEmail(request.email);
+        user.setDepartment(request.department);
+        user.setPassword(request.password);
+
+        return userService.registerUser(user);
     }
-    
+
+    // ✅ GET ALL USERS (protected by security)
+    // GET /api/users
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
-    
+
+    // ✅ GET USER BY ID (protected by security)
+    // GET /api/users/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        User user = userService.getUser(id);
-        return ResponseEntity.ok(user);
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 }
