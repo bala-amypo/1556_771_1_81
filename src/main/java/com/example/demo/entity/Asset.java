@@ -16,7 +16,12 @@ public class Asset {
     private String description;
 
     @Column(nullable = false)
-    private String status; // ✅ ADDED
+    private String status;
+
+    // ✅ THIS FIELD FIXES THE ERROR
+    @ManyToOne
+    @JoinColumn(name = "current_holder_id")
+    private User currentHolder;
 
     public Asset() {
     }
@@ -27,7 +32,7 @@ public class Asset {
         this.status = status;
     }
 
-    // --- getters & setters ---
+    // ---------- getters & setters ----------
 
     public Long getId() {
         return id;
@@ -53,11 +58,19 @@ public class Asset {
         this.description = description;
     }
 
-    public String getStatus() {   // ✅ ADDED
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {  // ✅ THIS FIXES THE ERROR
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public User getCurrentHolder() {
+        return currentHolder;
+    }
+
+    public void setCurrentHolder(User currentHolder) {
+        this.currentHolder = currentHolder;
     }
 }
