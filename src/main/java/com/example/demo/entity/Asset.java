@@ -1,4 +1,4 @@
- package com.example.demo.entity;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
@@ -15,13 +15,19 @@ public class Asset {
 
     private String description;
 
+    @Column(nullable = false)
+    private String status; // ✅ ADDED
+
     public Asset() {
     }
 
-    public Asset(String name, String description) {
+    public Asset(String name, String description, String status) {
         this.name = name;
         this.description = description;
+        this.status = status;
     }
+
+    // --- getters & setters ---
 
     public Long getId() {
         return id;
@@ -45,5 +51,13 @@ public class Asset {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getStatus() {   // ✅ ADDED
+        return status;
+    }
+
+    public void setStatus(String status) {  // ✅ THIS FIXES THE ERROR
+        this.status = status;
     }
 }
