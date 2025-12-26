@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
@@ -15,37 +17,74 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
     private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // ✅ Generate JWT Token
-    public String generateToken(String username) {
+    // =========================
+    // TOKEN GENERATION
+    // =========================
+
+    // ✅ Used by tests: generateToken(Map, String)
+    public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .setSubject(username)
+                .setClaims(claims)
+                .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(secretKey)
                 .compact();
     }
 
-    // ✅ Extract username
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
+    // ✅ Used by tests: generateTokenForUser(User)
+    public String generateTokenForUser(User user) {
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .claim("userId", user.getId())
+                .claim("role", user.getRole())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(secretKey)
+                .compact();
     }
 
-    // ✅ Validate token
-    public boolean validateToken(String token, String username) {
-        return extractUsername(token).equals(username) && !isTokenExpired(token);
-    }
+    // =========================
+    // TOKEN PARSING
+    // =========================
 
-    // ✅ Check expiration
-    private boolean isTokenExpired(String token) {
-        return extractAllClaims(token).getExpiration().before(new Date());
-    }
-
-    // ✅ Core parser (FIXED)
-    private Claims extractAllClaims(String token) {
+    // ✅ Used by tests: parseToken(String)
+    public Claims parseToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
-                .getBody();   // ✔ NOT getPayload()
+                .getBody();
+    }
+
+    // =========================
+    // EXTRACT DATA
+    // =========================
+
+    // ✅ Used by tests
+    public String extractRole(String token) {
+        return parseToken(token).get("role", String.class);
+    }
+
+    // ✅ Used by tests
+    public Long extractUserId(String token) {
+        return parseToken(token).get("userId", Long.class);
+    }
+
+    public String extractUsername(String token) {
+        return parseToken(token).getSubject();
+    }
+
+    // =========================
+    // VALIDATION
+    // =========================
+
+    // ✅ Used by tests: isTokenValid(String, String)
+    public boolean isTokenValid(String token, String username) {
+        return extractUsername(token).equals(username) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return parseToken(token).getExpiration().before(new Date());
     }
 }
