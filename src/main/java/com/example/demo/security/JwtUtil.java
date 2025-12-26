@@ -22,15 +22,15 @@ public class JwtUtil {
     // =========================
 
     // ✅ Used by tests: generateToken(Map, String)
-    public String generateToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(secretKey)
-                .compact();
-    }
+   public String generateToken(User user) {
+    return Jwts.builder()
+            .setSubject(user.getEmail())   // ✅ FIXED
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+            .signWith(key)
+            .compact();
+}
+
 
     // ✅ Used by tests: generateTokenForUser(User)
     public String generateTokenForUser(User user) {
