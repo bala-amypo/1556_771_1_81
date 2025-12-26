@@ -43,7 +43,6 @@ public class JwtUtil {
 
     /* ================= TOKEN PARSING ================= */
 
-    // IMPORTANT: tests call parseToken(token).getPayload()
     public Jws<Claims> parseToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -54,15 +53,15 @@ public class JwtUtil {
     /* ================= EXTRACT METHODS ================= */
 
     public String extractUsername(String token) {
-        return parseToken(token).getPayload().getSubject();
+        return parseToken(token).getBody().getSubject(); // <-- use getBody()
     }
 
     public String extractRole(String token) {
-        return parseToken(token).getPayload().get("role", String.class);
+        return parseToken(token).getBody().get("role", String.class);
     }
 
     public Long extractUserId(String token) {
-        return parseToken(token).getPayload().get("userId", Long.class);
+        return parseToken(token).getBody().get("userId", Long.class);
     }
 
     /* ================= VALIDATION ================= */
@@ -73,7 +72,7 @@ public class JwtUtil {
     }
 
     private boolean isTokenExpired(String token) {
-        Date expiration = parseToken(token).getPayload().getExpiration();
+        Date expiration = parseToken(token).getBody().getExpiration(); // <-- use getBody()
         return expiration.before(new Date());
     }
 }
