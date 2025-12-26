@@ -4,6 +4,10 @@ import com.example.demo.entity.TransferRecord;
 import java.util.List;
 
 public interface TransferRecordService {
-    TransferRecord transferAsset(TransferRecord record);
-    List<TransferRecord> getTransfersByAsset(Long assetId);
+
+    TransferRecord createTransfer(Long assetId, TransferRecord record);
+
+    List<TransferRecord> getTransfersForAsset(Long assetId);
+
+    TransferRecord getTransfer(Long id);
 }

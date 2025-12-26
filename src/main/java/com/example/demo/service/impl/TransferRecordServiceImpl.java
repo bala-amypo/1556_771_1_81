@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.TransferRecord;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.TransferRecordRepository;
 import com.example.demo.service.TransferRecordService;
 
@@ -15,12 +16,18 @@ public class TransferRecordServiceImpl implements TransferRecordService {
     }
 
     @Override
-    public TransferRecord transferAsset(TransferRecord record) {
+    public TransferRecord createTransfer(Long assetId, TransferRecord record) {
         return transferRecordRepository.save(record);
     }
 
     @Override
-    public List<TransferRecord> getTransfersByAsset(Long assetId) {
+    public List<TransferRecord> getTransfersForAsset(Long assetId) {
         return transferRecordRepository.findByAsset_Id(assetId);
+    }
+
+    @Override
+    public TransferRecord getTransfer(Long id) {
+        return transferRecordRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Transfer record not found"));
     }
 }
