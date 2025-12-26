@@ -4,9 +4,11 @@ import com.example.demo.entity.DisposalRecord;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DisposalRecordRepository;
 import com.example.demo.service.DisposalRecordService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service   // ✅ REQUIRED
 public class DisposalRecordServiceImpl implements DisposalRecordService {
 
     private final DisposalRecordRepository disposalRecordRepository;
@@ -28,6 +30,7 @@ public class DisposalRecordServiceImpl implements DisposalRecordService {
     @Override
     public DisposalRecord getDisposal(Long id) {
         return disposalRecordRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Disposal record not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Disposal record not found"));
     }
 }

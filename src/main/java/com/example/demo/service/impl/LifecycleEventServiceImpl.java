@@ -4,9 +4,11 @@ import com.example.demo.entity.LifecycleEvent;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.LifecycleEventRepository;
 import com.example.demo.service.LifecycleEventService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service   // ✅ REQUIRED
 public class LifecycleEventServiceImpl implements LifecycleEventService {
 
     private final LifecycleEventRepository lifecycleEventRepository;
@@ -28,6 +30,7 @@ public class LifecycleEventServiceImpl implements LifecycleEventService {
     @Override
     public LifecycleEvent getEvent(Long id) {
         return lifecycleEventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Lifecycle event not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Lifecycle event not found"));
     }
 }
