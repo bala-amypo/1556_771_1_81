@@ -22,7 +22,6 @@ public class JwtUtil {
 
     /* ================= TOKEN GENERATION ================= */
 
-    // Used by tests
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -33,7 +32,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Used by tests
     public String generateTokenForUser(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
@@ -43,25 +41,26 @@ public class JwtUtil {
 
     /* ================= TOKEN PARSING ================= */
 
-    public Jws<Claims> parseToken(String token) {
-        return Jwts.parserBuilder()
+    public Claims parseToken(String token) {
+        return Jwts.parserBuilder()             // ✅ parserBuilder() is correct for 0.12.5
                 .setSigningKey(getSigningKey())
                 .build()
-                .parseClaimsJws(token);
+                .parseClaimsJws(token)           // parseClaimsJws is available on JwtParser
+                .getBody();
     }
 
     /* ================= EXTRACT METHODS ================= */
 
     public String extractUsername(String token) {
-        return parseToken(token).getBody().getSubject(); // <-- use getBody()
+        return parseToken(token).getSubject();
     }
 
     public String extractRole(String token) {
-        return parseToken(token).getBody().get("role", String.class);
+        return parseToken(token).get("role", String.class);
     }
 
     public Long extractUserId(String token) {
-        return parseToken(token).getBody().get("userId", Long.class);
+        return parseToken(token).get("userId", Long.class);
     }
 
     /* ================= VALIDATION ================= */
@@ -72,7 +71,7 @@ public class JwtUtil {
     }
 
     private boolean isTokenExpired(String token) {
-        Date expiration = parseToken(token).getBody().getExpiration(); // <-- use getBody()
+        Date expiration = parseToken(token).getExpiration();
         return expiration.before(new Date());
     }
 }
