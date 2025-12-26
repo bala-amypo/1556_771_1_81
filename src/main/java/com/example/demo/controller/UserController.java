@@ -1,45 +1,33 @@
-// File: src/main/java/com/example/demo/controller/UserController.java
 package com.example.demo.controller;
 
-import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
-    
+
     private final UserService userService;
-    
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest request) {
-        User user = new User();
-        user.setFullName(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setDepartment(request.getDepartment());
-        user.setPassword(request.getPassword());
-        
-        User registeredUser = userService.registerUser(user);
-        return ResponseEntity.ok(registeredUser);
+
+    @PostMapping
+    public User register(@RequestBody User user) {
+        return userService.registerUser(user);
     }
-    
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
-    }
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        User user = userService.getUser(id);
-        return ResponseEntity.ok(user);
+    public User get(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
+
+    @GetMapping
+    public List<User> all() {
+        return userService.getAllUsers();
     }
 }
