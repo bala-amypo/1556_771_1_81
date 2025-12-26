@@ -1,13 +1,12 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Asset;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AssetRepository;
 import com.example.demo.service.AssetService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class AssetServiceImpl implements AssetService {
 
     private final AssetRepository assetRepository;
@@ -16,28 +15,22 @@ public class AssetServiceImpl implements AssetService {
         this.assetRepository = assetRepository;
     }
 
-    @Override
     public Asset createAsset(Asset asset) {
         return assetRepository.save(asset);
     }
 
-    @Override
     public Asset getAsset(Long id) {
-        return assetRepository.findById(id).orElse(null);
+        return assetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
     }
 
-    @Override
     public List<Asset> getAllAssets() {
         return assetRepository.findAll();
     }
 
-    @Override
-    public Asset updateStatus(Long assetId, String status) {
-        Asset asset = assetRepository.findById(assetId).orElse(null);
-        if (asset != null) {
-            asset.setStatus(status);
-            assetRepository.save(asset);
-        }
-        return asset;
+    public Asset updateStatus(Long id, String status) {
+        Asset asset = getAsset(id);
+        asset.setStatus(status);
+        return assetRepository.save(asset);
     }
 }
