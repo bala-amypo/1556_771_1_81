@@ -1,39 +1,33 @@
-// File: src/main/java/com/example/demo/entity/DisposalRecord.java
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 
 @Entity
 @Table(name = "disposal_records")
 public class DisposalRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @OneToOne
-    @JoinColumn(name = "asset_id", nullable = false, unique = true)
     private Asset asset;
-    
-    @Column(nullable = false)
-    private String disposalMethod; // RECYCLED, SOLD, SCRAPPED, RETURNED
-    
+
+    private String disposalMethod;
     private LocalDate disposalDate;
-    
+
     @ManyToOne
-    @JoinColumn(name = "approved_by_id", nullable = false)
     private User approvedBy;
-    
+
     private String notes;
-    
     private LocalDateTime createdAt;
-    
-    // Constructors
+
     public DisposalRecord() {}
-    
-    public DisposalRecord(Long id, Asset asset, String disposalMethod, LocalDate disposalDate, 
-                         User approvedBy, String notes, LocalDateTime createdAt) {
+
+    public DisposalRecord(Long id, Asset asset, String disposalMethod,
+                          LocalDate disposalDate, User approvedBy,
+                          String notes, LocalDateTime createdAt) {
         this.id = id;
         this.asset = asset;
         this.disposalMethod = disposalMethod;
@@ -42,34 +36,31 @@ public class DisposalRecord {
         this.notes = notes;
         this.createdAt = createdAt;
     }
-    
-    // Getters and Setters
+
+    @PrePersist
+    public void prePersist() {
+        if (createdAt == null) createdAt = LocalDateTime.now();
+    }
+
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    
+
     public Asset getAsset() { return asset; }
     public void setAsset(Asset asset) { this.asset = asset; }
-    
+
     public String getDisposalMethod() { return disposalMethod; }
     public void setDisposalMethod(String disposalMethod) { this.disposalMethod = disposalMethod; }
-    
+
     public LocalDate getDisposalDate() { return disposalDate; }
     public void setDisposalDate(LocalDate disposalDate) { this.disposalDate = disposalDate; }
-    
+
     public User getApprovedBy() { return approvedBy; }
     public void setApprovedBy(User approvedBy) { this.approvedBy = approvedBy; }
-    
+
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
-    
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    
-    // PrePersist callback
-    @PrePersist
-    protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-    }
 }

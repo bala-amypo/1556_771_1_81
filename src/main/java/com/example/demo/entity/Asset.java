@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.*;
 
 @Entity
 @Table(name = "assets")
@@ -10,67 +11,63 @@ public class Asset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(unique = true)
+    private String assetTag;
 
-    private String description;
-
-    @Column(nullable = false)
+    private String assetType;
+    private String model;
+    private LocalDate purchaseDate;
     private String status;
 
-    // ✅ THIS FIELD FIXES THE ERROR
     @ManyToOne
-    @JoinColumn(name = "current_holder_id")
     private User currentHolder;
 
-    public Asset() {
-    }
+    private LocalDateTime createdAt;
 
-    public Asset(String name, String description, String status) {
-        this.name = name;
-        this.description = description;
-        this.status = status;
-    }
+    public Asset() {}
 
-    // ---------- getters & setters ----------
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public Asset(Long id, String assetTag, String assetType, String model,
+                 LocalDate purchaseDate, String status,
+                 User currentHolder, LocalDateTime createdAt) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+        this.assetTag = assetTag;
+        this.assetType = assetType;
+        this.model = model;
+        this.purchaseDate = purchaseDate;
         this.status = status;
-    }
-
-    public User getCurrentHolder() {
-        return currentHolder;
-    }
-
-    public void setCurrentHolder(User currentHolder) {
         this.currentHolder = currentHolder;
+        this.createdAt = createdAt;
     }
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) status = "AVAILABLE";
+        if (createdAt == null) createdAt = LocalDateTime.now();
+    }
+
+    // getters & setters
+    // (keep all)
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getAssetTag() { return assetTag; }
+    public void setAssetTag(String assetTag) { this.assetTag = assetTag; }
+
+    public String getAssetType() { return assetType; }
+    public void setAssetType(String assetType) { this.assetType = assetType; }
+
+    public String getModel() { return model; }
+    public void setModel(String model) { this.model = model; }
+
+    public LocalDate getPurchaseDate() { return purchaseDate; }
+    public void setPurchaseDate(LocalDate purchaseDate) { this.purchaseDate = purchaseDate; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public User getCurrentHolder() { return currentHolder; }
+    public void setCurrentHolder(User currentHolder) { this.currentHolder = currentHolder; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
