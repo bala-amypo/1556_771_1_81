@@ -63,8 +63,7 @@ public class SecurityConfig {
 
         // 🔒 Explicit origins (NO wildcard in prod)
         config.setAllowedOrigins(List.of(
-                "https://9080
-                // .pro604cr.amypo.ai",
+                "https://9080.pro604cr.amypo.ai",
                 "http://localhost:9001"
         ));
 
