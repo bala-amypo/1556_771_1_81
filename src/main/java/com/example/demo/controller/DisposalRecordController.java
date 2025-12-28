@@ -1,40 +1,38 @@
-// File: src/main/java/com/example/demo/controller/DisposalRecordController.java
 package com.example.demo.controller;
 
 import com.example.demo.entity.DisposalRecord;
 import com.example.demo.service.DisposalRecordService;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/disposals")
+@Tag(name = "Disposals")
 public class DisposalRecordController {
-    
+
     private final DisposalRecordService disposalRecordService;
-    
-    public DisposalRecordController(DisposalRecordService disposalRecordService) {
+
+    public DisposalRecordController(
+            DisposalRecordService disposalRecordService) {
         this.disposalRecordService = disposalRecordService;
     }
-    
+
     @PostMapping("/{assetId}")
-    public ResponseEntity<DisposalRecord> createDisposal(
+    public DisposalRecord createDisposal(
             @PathVariable Long assetId,
             @RequestBody DisposalRecord disposal) {
-        DisposalRecord createdDisposal = disposalRecordService.createDisposal(assetId, disposal);
-        return ResponseEntity.ok(createdDisposal);
+        return disposalRecordService.createDisposal(assetId, disposal);
     }
-    
+
     @GetMapping
-    public ResponseEntity<List<DisposalRecord>> getAllDisposals() {
-        List<DisposalRecord> disposals = disposalRecordService.getAllDisposals();
-        return ResponseEntity.ok(disposals);
+    public List<DisposalRecord> getAllDisposals() {
+        return disposalRecordService.getAllDisposals();
     }
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<DisposalRecord> getDisposal(@PathVariable Long id) {
-        DisposalRecord disposal = disposalRecordService.getDisposal(id);
-        return ResponseEntity.ok(disposal);
+    public DisposalRecord getDisposal(@PathVariable Long id) {
+        return disposalRecordService.getDisposal(id);
     }
 }
