@@ -8,30 +8,36 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // ✅ ADD THIS
+@Service
 public class AssetServiceImpl implements AssetService {
 
     private final AssetRepository assetRepository;
 
+    // Constructor injection (TEST SAFE)
     public AssetServiceImpl(AssetRepository assetRepository) {
         this.assetRepository = assetRepository;
     }
 
+    @Override
     public Asset createAsset(Asset asset) {
         return assetRepository.save(asset);
     }
 
+    @Override
     public Asset getAsset(Long id) {
         return assetRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Asset not found"));
     }
 
+    @Override
     public List<Asset> getAllAssets() {
         return assetRepository.findAll();
     }
 
-    public Asset updateStatus(Long id, String status) {
-        Asset asset = getAsset(id);
+    @Override
+    public Asset updateStatus(Long assetId, String status) {
+        Asset asset = getAsset(assetId);
         asset.setStatus(status);
         return assetRepository.save(asset);
     }

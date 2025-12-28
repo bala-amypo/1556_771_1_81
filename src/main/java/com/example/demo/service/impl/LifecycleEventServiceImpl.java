@@ -20,28 +20,36 @@ public class LifecycleEventServiceImpl implements LifecycleEventService {
     private final AssetRepository assetRepository;
     private final UserRepository userRepository;
 
-    public LifecycleEventServiceImpl(LifecycleEventRepository lifecycleEventRepository,
-                                     AssetRepository assetRepository,
-                                     UserRepository userRepository) {
+    // REQUIRED constructor order
+    public LifecycleEventServiceImpl(
+            LifecycleEventRepository lifecycleEventRepository,
+            AssetRepository assetRepository,
+            UserRepository userRepository) {
+
         this.lifecycleEventRepository = lifecycleEventRepository;
         this.assetRepository = assetRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public LifecycleEvent logEvent(Long assetId, Long userId, LifecycleEvent event) {
+    public LifecycleEvent logEvent(Long assetId, Long userId,
+                                   LifecycleEvent event) {
+
         Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Asset not found"));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
 
         if (event.getEventType() == null) {
             throw new ValidationException("Event type is required");
         }
 
-        if (event.getEventDescription() == null || event.getEventDescription().isEmpty()) {
-            throw new ValidationException("Event description is required");
+        if (event.getEventDescription() == null ||
+                event.getEventDescription().isEmpty()) {
+            throw new ValidationException("Event description cannot be empty");
         }
 
         event.setAsset(asset);

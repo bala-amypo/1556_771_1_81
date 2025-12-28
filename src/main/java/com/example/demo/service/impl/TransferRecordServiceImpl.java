@@ -21,9 +21,12 @@ public class TransferRecordServiceImpl implements TransferRecordService {
     private final AssetRepository assetRepository;
     private final UserRepository userRepository;
 
-    public TransferRecordServiceImpl(TransferRecordRepository transferRecordRepository,
-                                     AssetRepository assetRepository,
-                                     UserRepository userRepository) {
+    // REQUIRED constructor order
+    public TransferRecordServiceImpl(
+            TransferRecordRepository transferRecordRepository,
+            AssetRepository assetRepository,
+            UserRepository userRepository) {
+
         this.transferRecordRepository = transferRecordRepository;
         this.assetRepository = assetRepository;
         this.userRepository = userRepository;
@@ -31,24 +34,28 @@ public class TransferRecordServiceImpl implements TransferRecordService {
 
     @Override
     public TransferRecord createTransfer(Long assetId, TransferRecord record) {
-        Asset asset = assetRepository.findById(assetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
 
-        User approver = userRepository.findById(record.getApprovedBy().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Asset asset = assetRepository.findById(assetId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Asset not found"));
+
+        User approver = userRepository.findById(
+                record.getApprovedBy().getId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
 
         if (!"ADMIN".equals(approver.getRole())) {
             throw new ValidationException("Approver must be ADMIN");
         }
 
-        if (record.getFromDepartment() != null &&
-                record.getFromDepartment().equals(record.getToDepartment())) {
-            throw new ValidationException("From and To departments must differ");
+        if (record.getFromDepartment()
+                .equals(record.getToDepartment())) {
+            throw new ValidationException("Departments must differ");
         }
 
-        if (record.getTransferDate() != null &&
-                record.getTransferDate().isAfter(LocalDate.now())) {
-            throw new ValidationException("Transfer date cannot be in the future");
+        if (record.getTransferDate().isAfter(LocalDate.now())) {
+            throw new ValidationException(
+                    "Transfer date cannot be in the future");
         }
 
         record.setAsset(asset);

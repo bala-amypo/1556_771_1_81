@@ -10,12 +10,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // ✅ REQUIRED
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // REQUIRED constructor order
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(User user) {
+
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new ValidationException("Email already in use");
         }

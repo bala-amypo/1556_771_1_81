@@ -1,5 +1,14 @@
-package serv;
+package com.example.demo.service;
 
-public class user {
-    
+import com.example.demo.entity.User;
+
+import java.util.List;
+
+public interface UserService {
+
+    User registerUser(User user);
+
+    User getUser(Long id);
+
+    List<User> getAllUsers();
 }
