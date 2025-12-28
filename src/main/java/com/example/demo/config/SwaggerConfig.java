@@ -22,7 +22,6 @@ public class SwaggerConfig {
                 .scheme("bearer")
                 .bearerFormat("JWT");
 
-        // 🔥 IMPORTANT: HTTPS ONLY (NO http, NO trailing slash)
         Server productionServer = new Server()
                 .url("https://9080.pro604cr.amypo.ai")
                 .description("Production Server");
