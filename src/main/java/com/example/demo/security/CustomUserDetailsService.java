@@ -1,3 +1,4 @@
+
 package com.example.demo.security;
 
 import com.example.demo.entity.User;
@@ -10,12 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // 🔥 THIS IS CRITICAL
+@Service   
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    // Constructor injection (required by tests)
     public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

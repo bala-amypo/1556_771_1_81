@@ -1,3 +1,4 @@
+
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Asset;
@@ -13,7 +14,6 @@ public class AssetServiceImpl implements AssetService {
 
     private final AssetRepository assetRepository;
 
-    // Constructor injection (TEST SAFE)
     public AssetServiceImpl(AssetRepository assetRepository) {
         this.assetRepository = assetRepository;
     }
@@ -26,8 +26,7 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public Asset getAsset(Long id) {
         return assetRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Asset not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
     }
 
     @Override
@@ -37,7 +36,9 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Asset updateStatus(Long assetId, String status) {
-        Asset asset = getAsset(assetId);
+        Asset asset = assetRepository.findById(assetId)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found"));
+
         asset.setStatus(status);
         return assetRepository.save(asset);
     }
