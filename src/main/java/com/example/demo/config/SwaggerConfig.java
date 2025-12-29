@@ -2,7 +2,6 @@ package com.example.demo.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
@@ -15,33 +14,20 @@ import java.util.List;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI openAPI() {
-
-        SecurityScheme bearerScheme = new SecurityScheme()
+    public OpenAPI customOpenAPI() {
+        SecurityScheme securityScheme = new SecurityScheme()
+                .name("Authorization")
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
 
-        Server productionServer = new Server()
-                .url("https://9080.pro604cr.amypo.ai")
-                .description("Production Server");
-
-        Server localServer = new Server()
-                .url("http://localhost:9001")
-                .description("Local Server");
-
         return new OpenAPI()
-                .info(new Info()
-                        .title("Digital Asset Lifecycle & Audit Trail API")
-                        .description("Asset management with lifecycle, transfers, disposals and JWT security")
-                        .version("1.0.0")
-                )
-                .servers(List.of(productionServer, localServer))
+                .servers(List.of(
+                        new Server().url("https://9278.pro604cr.amypo.ai/")
+                ))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth", bearerScheme)
-                )
-                .addSecurityItem(
-                        new SecurityRequirement().addList("bearerAuth")
+                        .addSecuritySchemes("bearerAuth", securityScheme)
                 );
     }
 }
