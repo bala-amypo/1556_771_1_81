@@ -1,3 +1,4 @@
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
@@ -12,17 +13,20 @@ public class LifecycleEvent {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "asset_id")
+    @JoinColumn(name = "asset_id", nullable = false)
     private Asset asset;
 
+    @Column(name = "event_type", nullable = false)
     private String eventType;
 
+    @Column(name = "event_description", nullable = false)
     private String eventDescription;
 
+    @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
 
     @ManyToOne
-    @JoinColumn(name = "performed_by")
+    @JoinColumn(name = "performed_by", nullable = false)
     private User performedBy;
 
     public LifecycleEvent() {
@@ -39,17 +43,13 @@ public class LifecycleEvent {
         this.performedBy = performedBy;
     }
 
-    @PrePersist
-    public void prePersist() {
-        if (this.eventDate == null) {
-            this.eventDate = LocalDateTime.now();
-        }
-    }
-
-    // Getters and Setters
-
+   
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Asset getAsset() {
@@ -58,10 +58,6 @@ public class LifecycleEvent {
 
     public void setAsset(Asset asset) {
         this.asset = asset;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEventType() {
@@ -84,11 +80,23 @@ public class LifecycleEvent {
         return eventDate;
     }
 
+    public void setEventDate(LocalDateTime eventDate) {
+        this.eventDate = eventDate;
+    }
+
     public User getPerformedBy() {
         return performedBy;
     }
 
     public void setPerformedBy(User performedBy) {
         this.performedBy = performedBy;
+    }
+
+   
+    @PrePersist
+    public void prePersist() {
+        if (this.eventDate == null) {
+            this.eventDate = LocalDateTime.now();
+        }
     }
 }

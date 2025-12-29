@@ -1,3 +1,4 @@
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
@@ -12,25 +13,30 @@ public class TransferRecord {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "asset_id")
+    @JoinColumn(name = "asset_id", nullable = false)
     private Asset asset;
 
+    @Column(name = "from_department", nullable = false)
     private String fromDepartment;
 
+    @Column(name = "to_department", nullable = false)
     private String toDepartment;
 
+    @Column(name = "transfer_date", nullable = false)
     private LocalDate transferDate;
 
     @ManyToOne
-    @JoinColumn(name = "approved_by")
+    @JoinColumn(name = "approved_by", nullable = false)
     private User approvedBy;
 
+   
     public TransferRecord() {
     }
 
-    public TransferRecord(Long id, Asset asset,
-                          String fromDepartment, String toDepartment,
-                          LocalDate transferDate, User approvedBy) {
+   
+    public TransferRecord(Long id, Asset asset, String fromDepartment,
+                          String toDepartment, LocalDate transferDate,
+                          User approvedBy) {
         this.id = id;
         this.asset = asset;
         this.fromDepartment = fromDepartment;
@@ -39,10 +45,12 @@ public class TransferRecord {
         this.approvedBy = approvedBy;
     }
 
-    // Getters and Setters
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Asset getAsset() {
@@ -51,10 +59,6 @@ public class TransferRecord {
 
     public void setAsset(Asset asset) {
         this.asset = asset;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFromDepartment() {
